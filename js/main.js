@@ -9,6 +9,8 @@ let x = 0;
 let halfWidth = window.screen.width / 2;
 let hit = false;
 let jump = false;
+let fall = false;
+
 
 let heroImg = document.getElementById('hero-img'); //КАРТИНКА ГЕРОЯ
 let imgBlock = document.getElementById('imgBlock'); //БЛОК С КАРТИНКОЙ ГЕРОЯ
@@ -16,9 +18,10 @@ let canvas = document.getElementById('canvas'); // ОСНОВНОЙ ХОЛСТ �
 let fsBtn = document.getElementById('fsBtn'); //КНОПКА ПЕРЕХОДА В ПОЛНОЭКРАННЫЙ РЕЖИМ
 let info = document.getElementById('info');
 let tileArray = [];
+let imgBlockStyle = window.getComputedStyle(imgBlock);
 
-let heroX = Math.floor((Number.parseInt(window.getComputedStyle(imgBlock).getPropertyValue('left')) + 32)/ 32); 
-let heroY = Math.floor(Number.parseInt(window.getComputedStyle(imgBlock).getPropertyValue('bottom'))/ 32);
+let heroX = Math.ceil((Number.parseInt(window.getComputedStyle(imgBlock).getPropertyValue('left')) + 32)/ 32); 
+let heroY = Math.ceil(Number.parseInt(window.getComputedStyle(imgBlock).getPropertyValue('bottom'))/ 32);
 
 
 let jumpBlock = document.getElementById('jump-block'); //КНОПКА ПРЫЖКА
@@ -83,6 +86,9 @@ const jumpHendler = () => {
             if(rightPosition > 4){
                 rightPosition = 1;
                 jump = false;
+                imgBlock.style.bottom = `${Number.parseInt(imgBlockStyle.getPropertyValue('bottom')) + 160}px`;
+                imgBlockPosition = imgBlockPosition + 10;
+                imgBlock.style.left = `${imgBlockPosition * 20}px`;
             }
             break;
         }
@@ -91,6 +97,9 @@ const jumpHendler = () => {
             if(rightPosition > 3){
                 rightPosition = 0;
                 jump = false;
+                imgBlock.style.bottom = `${Number.parseInt(imgBlockStyle.getPropertyValue('bottom')) + 160}px`;
+                imgBlockPosition = imgBlockPosition - 10;
+                imgBlock.style.left = `${imgBlockPosition * 20}px`;
             }
             break;
         }
@@ -103,13 +112,14 @@ const jumpHendler = () => {
 }
 
 const updateHeroXY = () => {
-    heroX = Math.floor((Number.parseInt(window.getComputedStyle(imgBlock).getPropertyValue('left')) + 32)/ 32); 
-    heroY = Math.floor(Number.parseInt(window.getComputedStyle(imgBlock).getPropertyValue('bottom'))/ 32);
+    heroX = Math.ceil((Number.parseInt(window.getComputedStyle(imgBlock).getPropertyValue('left')) + 32)/ 32); 
+    heroY = Math.ceil(Number.parseInt(window.getComputedStyle(imgBlock).getPropertyValue('bottom'))/ 32);
 
     info.innerText = `heroX = ${heroX}, heroY = ${heroY}`;
 }
 
 const checkFalling = () => {
+    updateHeroXY();
     let isFalling = true;
     for(let i = 0; i < tileArray.length; i++){
         if((tileArray[i][0] === heroX) && ((tileArray[i][1] + 1) === heroY)){
@@ -118,9 +128,17 @@ const checkFalling = () => {
     }
     if(isFalling) {
         info.innerText = info.innerText + ', Falling';
+        fall = true;
     } else {
         info.innerText = info.innerText + ', not Falling';
+        fall = false;
     }
+}
+
+const fallHendler = () => {
+    heroImg.style.top = '-96px';
+    imgBlock.style.bottom = `${Number.parseInt(imgBlockStyle.getPropertyValue('bottom')) - 40}px`;
+    checkFalling();
 }
 
 //ФУНКЦИЯ АНИМАЦИИ И ПЕРЕДВИЖЕНИЯ ВПРАВО
@@ -135,7 +153,6 @@ const rightHendler = () => {
     heroImg.style.top = '-192px';
     imgBlock.style.left = `${imgBlockPosition * 20}px`;
 
-    updateHeroXY();
     checkFalling();
 }
 
@@ -151,7 +168,6 @@ const leftHendler = () => {
     heroImg.style.top = '-192px';
     imgBlock.style.left = `${imgBlockPosition * 20}px`;
 
-    updateHeroXY();
     checkFalling();
 }
 
@@ -178,6 +194,8 @@ const standHendler = () => {
     rightPosition = rightPosition + 1;
     heroImg.style.left = `-${rightPosition * 96}px`;
     heroImg.style.top = '0px';
+
+    checkFalling();
 }
 
 //ФУНКЦИЯ ВЫЗЫВАЮЩАЯ ТАЙМЕР ДЛЯ ЗАПУСКА ФУНКЦИИ СОСТОЯНИЯ НА МЕСТЕ 
@@ -252,11 +270,13 @@ const addTiles = (i) => {
 
 const lifeCycle = () => {
     timer = setInterval(() => {
-        if(hit) {
+        if (hit) {
             hitHendler();
-        }else if(jump) {
+        }else if (jump) {
             jumpHendler();
-        }else {
+        }else if (fall) {
+            fallHendler();
+        } else {
             standHendler();
         }
     }, 150);
@@ -274,6 +294,7 @@ const start = () => {
     createTilesPlatform(10, 10, 10);
     createTilesPlatform(20, 5, 10);
     createTilesPlatform(40, 8, 10);
+    createTilesPlatform(25, 15, 10);
 
 }
 

@@ -89,6 +89,7 @@
 }
 
 .info-block {
+    display: none;
     position: absolute;
     top: 64px;
     left: 96px;
