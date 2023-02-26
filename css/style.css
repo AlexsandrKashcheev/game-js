@@ -1,0 +1,101 @@
+
+.img-block{
+    width: 96px;
+    height: 96px;
+    overflow: hidden;
+    position: absolute;
+    left: 0px;
+    bottom: 64px;
+}
+
+.bg-intro{
+    position: absolute;
+    left: 0;
+    bottom: 64px;
+    width: 100%;
+}
+
+.canv {
+    background-color: #fff;
+}
+
+.btn-Full {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.hero{
+    width: 576px;
+    height: 384px;
+    position: relative;
+    top: 0;
+    left: -96px;
+    transform: scale(-1, 1);
+}
+
+.btn {
+    padding: 10px 30px;
+}
+
+.jump {
+    width: 144px;
+    height: 144px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    opacity: 0.5;
+}
+
+.jump-button {
+    position: absolute;
+    top: -144px;
+    left: -144px;
+    width: 864px;
+    height: 576px;
+    transform: scale(-1, 1);
+}
+
+.button-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 140px;
+    height: 140px;
+    border: 2px solid blue;
+    border-radius: 50%;
+}
+
+.hit {
+    width: 144px;
+    height: 144px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+    opacity: 0.5;
+}
+
+.hit-button {
+    position: absolute;
+    top: -452px;
+    left: -442px;
+    width: 864px;
+    height: 576px;
+    transform: scale(-1, 1);
+}
+
+.info-block {
+    position: absolute;
+    top: 64px;
+    left: 96px;
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+    font-size: 20pt;
+}
+
+
